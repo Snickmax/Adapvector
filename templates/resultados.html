@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados de la Simulación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resultados.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <h1>Resultados de la Simulación</h1>
+
+    <div class="volver-container">
+        <a href="{{ url_for('main.index') }}" class="volver-boton">Volver al Formulario</a>
+    </div>
+
+    <div class="info-simulacion">
+        <p><strong>Archivo de Simulación:</strong> {{ db_name }}</p>
+        <p><strong>Número de Simulaciones:</strong> {{ resumen["Observaciones"] }}</p>
+    </div>
+
+    <h2>Resumen Estadístico</h2>
+    <table>
+        <tr>
+            <th>Indicador</th>
+            <th>Valor</th>
+        </tr>
+        {% for key, value in resumen.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ "%.2f"|format(value) if value is number else value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Gráficos</h2>
+    <div class="chart-container">
+        <canvas id="histograma" width="900" height="400"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="poligono" width="900" height="400"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="fi" width="900" height="400"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="fiInversa" width="900" height="400"></canvas>
+    </div>
+
+    <h2>Opciones Reales</h2>
+    <table>
+        <tr>
+            <th>Estrategia</th>
+            <th>Escenario</th>
+            <th>VAN Esperado (USD)</th>
+        </tr>
+        {% for row in opciones %}
+        <tr>
+            <td>{{ row.estrategia }}</td>
+            <td>{{ row.escenario }}</td>
+            <td>{{ "%.2f"|format(row.van_esperado) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Análisis Estratégico</h2>
+
+    <h3>Ranking por Escenario</h3>
+    <table>
+        <tr>
+            <th>Escenario</th>
+            <th>Mejor Estrategia</th>
+            <th>VAN</th>
+            <th>2do Mejor Estrategia</th>
+            <th>Diferencia con 2do</th>
+        </tr>
+        {% for row in analisis if row.tipo == 'ranking' %}
+        <tr>
+            <td>{{ row.escenario }}</td>
+            <td>{{ row.estrategia }}</td>
+            <td>{{ "%.2f"|format(row.valor) }}</td>
+            <td>{{ row.segundo }}</td>
+            <td>{{ "%.2f"|format(row.diferencia) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+    <h3>Impacto Marginal respecto a Abandonar</h3>
+    <table>
+        <tr>
+            <th>Estrategia</th>
+            <th>Impacto</th>
+        </tr>
+        {% for row in analisis if row.tipo == 'impacto' %}
+        <tr>
+            <td>{{ row.estrategia }}</td>
+            <td>{{ "%.2f"|format(row.valor) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>VAN Ajustado por Riesgo (rEV) y rEV / Capex</h3>
+    <table>
+        <tr>
+            <th>Estrategia</th>
+            <th>rEV</th>
+            <th>Capex</th>
+            <th>rEV / Capex</th>
+        </tr>
+        {% for row in analisis if row.tipo == 'rev' %}
+        <tr>
+            <td>{{ row.estrategia }}</td>
+            <td>{{ "%.2f"|format(row.valor) }}</td>
+            <td>
+                {% if row.capex is number %}
+                {{ "%.2f"|format(row.capex) }}
+                {% else %}
+                {{ row.capex }}
+                {% endif %}
+            </td>
+            <td>
+                {% if row.ratio == "8" or row.ratio == "-8" or row.ratio == "-" %}
+                {{ row.ratio }}
+                {% elif row.ratio is number %}
+                {{ "%.2f"|format(row.ratio) }}
+                {% else %}
+                {{ row.ratio }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Dominancia de Estrategias</h2>
+    <table>
+        <tr>
+            <th>Estrategia</th>
+            <th>N° Veces Gana</th>
+            <th>% Veces Gana</th>
+            <th>N° Pierde</th>
+            <th>% Pierde</th>
+            <th>% Empates</th>
+        </tr>
+        {% for row in dominancia %}
+        <tr>
+            <td>{{ row.estrategia }}</td>
+            <td>{{ row.veces_gana }}</td>
+            <td>{{ "%.2f"|format(row.porc_gana * 100) }}%</td>
+            <td>{{ row.veces_pierde }}</td>
+            <td>{{ "%.2f"|format(row.porc_pierde * 100) }}%</td>
+            <td>{{ "%.2f"|format(row.porc_empate * 100) }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Ranking de Estrategias y Recomendaciones</h2>
+    <table>
+        <tr>
+            <th>Estrategia</th>
+            <th>rEV</th>
+            <th>CAPEX</th>
+            <th>rEV/CAPEX</th>
+            <th>Precio Prom</th>
+            <th>Ley Prom</th>
+            <th>Costo Mina</th>
+            <th>Costo Planta</th>
+            <th>Costo Total</th>
+            <th>Recomendación</th>
+        </tr>
+        {% for row in ranking %}
+        <tr>
+            <td>{{ row.estrategia }}</td>
+            <td>{{ "%.2f"|format(row.rev) }}</td>
+            <td>{{ "%.2f"|format(row.capex) }}</td>
+            <td>{{ "%.2f"|format(row.rev_capex) }}</td>
+            <td>{{ "%.2f"|format(row.precio_prom) }}</td>
+            <td>{{ "%.4f"|format(row.ley_prom) }}</td>
+            <td>{{ "%.2f"|format(row.costo_mina) }}</td>
+            <td>{{ "%.2f"|format(row.costo_planta) }}</td>
+            <td>{{ "%.2f"|format(row.costo_total) }}</td>
+            <td>{{ row.recomendacion }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        const labels = {{ tabla_frec | map(attribute = 'marca_clase') | list | tojson }};
+        const freqAbs = {{ tabla_frec | map(attribute = 'freq_abs') | list | tojson }};
+        const freqRelAcum = {{ tabla_frec | map(attribute = 'freq_rel_acum') | list | tojson }};
+        const freqRelAcumInv = {{ tabla_frec | map(attribute = 'freq_rel_acum_inv') | list | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/resultados.js') }}"></script>
+</body>
+
+</html>

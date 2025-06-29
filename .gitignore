@@ -1,0 +1,24 @@
+# Ignorar entorno virtual
+venv/
+
+# Ignorar archivos de base de datos dentro de la carpeta db
+db/*
+
+# Ignorar archivos temporales
+*.pyc
+__pycache__/
+
+# Ignorar archivos de configuración de editor
+.vscode/
+.idea/
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar archivos de pruebas locales
+*.sqlite3
+*.db
+
+# Ignorar archivos del sistema
+.DS_Store
+Thumbs.db

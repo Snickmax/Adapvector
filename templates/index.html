@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Parámetros por Clasificación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
+</head>
+
+<body>
+    <h1>Formulario de Parámetros por Clasificación</h1>
+
+    <form action="#" method="post" enctype="multipart/form-data">
+
+        <div class="file-input">
+            <label for="file">Cargar archivo Excel de parámetros:</label>
+            <input type="file" id="file" name="file">
+        </div>
+
+        <div class="buttons">
+            <button type="submit" name="action" value="cargar">Cargar archivo</button>
+            <button type="submit" name="action" value="simular">Enviar</button>
+        </div>
+
+
+        <!-- 1. PARÁMETROS ECONÓMICOS -->
+        <fieldset>
+            <legend>1. PARÁMETROS ECONÓMICOS</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">1.1. Precio esperado del cobre</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Precio_esperado_del_cobre_valor"
+                        value="{{ data.get('Precio_esperado_del_cobre_valor', '') }}">
+                    <span class="unit">USD/lb</span>
+                    <select name="Precio_esperado_del_cobre_dist">
+                        <option value="">--</option>
+                        <option value="NORMAL" {% if data.get('Precio_esperado_del_cobre_dist')=='NORMAL' %}selected{%
+                            endif %}>NORMAL</option>
+                        <option value="LOG-NORMAL" {% if data.get('Precio_esperado_del_cobre_dist')=='LOG-NORMAL'
+                            %}selected{% endif %}>LOG-NORMAL</option>
+                    </select>
+                    <input type="text" name="Precio_esperado_del_cobre_desv" placeholder="Desv. Est."
+                        value="{{ data.get('Precio_esperado_del_cobre_desv', '') }}">
+                </div>
+                <div class="comentario">Base para ingreso</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">1.2. Tasa de descuento</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Tasa_de_descuento_valor"
+                        value="{{ data.get('Tasa_de_descuento_valor', '') }}">
+                    <span class="unit">%</span>
+                </div>
+                <div class="comentario">TMAR del proyecto</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">1.3. Inflación esperada</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Inflacion_esperada_valor"
+                        value="{{ data.get('Inflacion_esperada_valor', '') }}">
+                    <span class="unit">%</span>
+                </div>
+                <div class="comentario">Ajuste de costos futuros</div>
+            </div>
+        </fieldset>
+
+        <!-- 2. PARÁMETROS RESERVA Y PROCESO -->
+        <fieldset>
+            <legend>2. PARÁMETROS RESERVA Y PROCESO</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">2.1. Producción mina anual</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Produccion_mina_anual_valor"
+                        value="{{ data.get('Produccion_mina_anual_valor', '') }}">
+                    <span class="unit">ton/año</span>
+                </div>
+                <div class="comentario">Toneladas ROM por año</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">2.2. Ley del mineral</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Ley_del_mineral_valor" value="{{ data.get('Ley_del_mineral_valor', '') }}">
+                    <span class="unit">%</span>
+                    <select name="Ley_del_mineral_dist">
+                        <option value="">--</option>
+                        <option value="NORMAL" {% if data.get('Ley_del_mineral_dist')=='NORMAL' %}selected{% endif %}>
+                            NORMAL</option>
+                        <option value="LOG-NORMAL" {% if data.get('Ley_del_mineral_dist')=='LOG-NORMAL' %}selected{%
+                            endif %}>LOG-NORMAL</option>
+                    </select>
+                    <input type="text" name="Ley_del_mineral_desv" placeholder="Desv. Est."
+                        value="{{ data.get('Ley_del_mineral_desv', '') }}">
+                </div>
+                <div class="comentario">Ley simulada uniforme entre extremos</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">2.3. Recuperación metalúrgica</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Recuperacion_metalurgica_valor"
+                        value="{{ data.get('Recuperacion_metalurgica_valor', '') }}">
+                    <span class="unit">%</span>
+                </div>
+                <div class="comentario">Fina recuperable por tonelada</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">2.4. Densidad mineral</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Densidad_mineral_valor"
+                        value="{{ data.get('Densidad_mineral_valor', '') }}">
+                    <span class="unit">ton/m³</span>
+                </div>
+                <div class="comentario">Opcional (para cálculo volumétrico)</div>
+            </div>
+        </fieldset>
+
+        <!-- 3. COSTOS VARIABLES -->
+        <fieldset>
+            <legend>3. COSTOS VARIABLES</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">3.1. Costo mina</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Costo_mina_valor" value="{{ data.get('Costo_mina_valor', '') }}">
+                    <span class="unit">USD/ton</span>
+                    <select name="Costo_mina_dist">
+                        <option value="">--</option>
+                        <option value="NORMAL" {% if data.get('Costo_mina_dist')=='NORMAL' %}selected{% endif %}>NORMAL
+                        </option>
+                        <option value="LOG-NORMAL" {% if data.get('Costo_mina_dist')=='LOG-NORMAL' %}selected{% endif
+                            %}>LOG-NORMAL</option>
+                    </select>
+                    <input type="text" name="Costo_mina_desv" placeholder="Desv. Est."
+                        value="{{ data.get('Costo_mina_desv', '') }}">
+                </div>
+                <div class="comentario">Costos variables mina</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">3.2. Costo planta</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Costo_planta_valor" value="{{ data.get('Costo_planta_valor', '') }}">
+                    <span class="unit">USD/ton</span>
+                    <select name="Costo_planta_dist">
+                        <option value="">--</option>
+                        <option value="NORMAL" {% if data.get('Costo_planta_dist')=='NORMAL' %}selected{% endif %}>
+                            NORMAL</option>
+                        <option value="LOG-NORMAL" {% if data.get('Costo_planta_dist')=='LOG-NORMAL' %}selected{% endif
+                            %}>LOG-NORMAL</option>
+                    </select>
+                    <input type="text" name="Costo_planta_desv" placeholder="Desv. Est."
+                        value="{{ data.get('Costo_planta_desv', '') }}">
+                </div>
+                <div class="comentario">Costos variables planta</div>
+            </div>
+        </fieldset>
+
+        <!-- 4. COSTOS FIJOS Y GENERALES -->
+        <fieldset>
+            <legend>4. COSTOS FIJOS Y GENERALES</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">4.1. Costos fijos anuales</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Costos_fijos_anuales_valor"
+                        value="{{ data.get('Costos_fijos_anuales_valor', '') }}">
+                    <span class="unit">USD/año</span>
+                </div>
+                <div class="comentario">SG&A, administración</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">4.2. Costos de cierre</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Costos_de_cierre_valor"
+                        value="{{ data.get('Costos_de_cierre_valor', '') }}">
+                    <span class="unit">USD</span>
+                </div>
+                <div class="comentario">Cierre y abandono</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">4.3. Costos de expansión</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Costos_de_expansion_valor"
+                        value="{{ data.get('Costos_de_expansion_valor', '') }}">
+                    <span class="unit">USD</span>
+                </div>
+                <div class="comentario">CAPEX adicional para expandir</div>
+            </div>
+        </fieldset>
+
+        <!-- 5. PARÁMETROS ESCENARIOS -->
+        <fieldset>
+            <legend>5. PARÁMETROS ESCENARIOS</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">5.1. Horizonte del proyecto</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Horizonte_del_proyecto_valor"
+                        value="{{ data.get('Horizonte_del_proyecto_valor', '') }}">
+                    <span class="unit">años</span>
+                </div>
+                <div class="comentario">Vida útil operativa estimada</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">5.2. Número de simulaciones</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Numero_de_simulaciones_valor"
+                        value="{{ data.get('Numero_de_simulaciones_valor', '') }}">
+                    <span class="unit">n°</span>
+                </div>
+                <div class="comentario">Para robustez de resultados (Monte Carlo)</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">5.3. Año decisión estratégica</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Ano_decision_estrategica_valor"
+                        value="{{ data.get('Ano_decision_estrategica_valor', '') }}">
+                    <span class="unit">año</span>
+                </div>
+                <div class="comentario">Año de inflexión para decisiones futuras</div>
+            </div>
+        </fieldset>
+
+        <!-- 6. INCERTIDUMBRE ADICIONAL -->
+        <fieldset>
+            <legend>6. INCERTIDUMBRE ADICIONAL</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">6.1. Disponibilidad operativa</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Disponibilidad_operativa_valor"
+                        value="{{ data.get('Disponibilidad_operativa_valor', '') }}">
+                    <span class="unit">%</span>
+                </div>
+                <div class="comentario">Eficiencia real de planta</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">6.2. Pérdida por mezcla</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Perdida_por_mezcla_valor"
+                        value="{{ data.get('Perdida_por_mezcla_valor', '') }}">
+                    <span class="unit">%</span>
+                </div>
+                <div class="comentario">Penalización sobre ley efectiva</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">6.3. Penalización impurezas</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Penalizacion_impurezas_valor"
+                        value="{{ data.get('Penalizacion_impurezas_valor', '') }}">
+                    <span class="unit">USD/ton</span>
+                </div>
+                <div class="comentario">Reducción de ingresos</div>
+            </div>
+        </fieldset>
+
+        <!-- 7. OPCIONES REALES -->
+        <fieldset>
+            <legend>7. OPCIONES REALES</legend>
+
+            <div class="parametro">
+                <div class="parametro-name">7.1. Valor de venta proyectado</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Valor_de_venta_proyectado_valor"
+                        value="{{ data.get('Valor_de_venta_proyectado_valor', '') }}">
+                    <span class="unit">USD</span>
+                </div>
+                <div class="comentario">Ingreso por estrategia de venta</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">7.2. Costo por suspender</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Costo_por_suspender_valor"
+                        value="{{ data.get('Costo_por_suspender_valor', '') }}">
+                    <span class="unit">USD</span>
+                </div>
+                <div class="comentario">Costos de suspensión temporal</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">7.3. Años de suspensión</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Anos_de_suspension_valor"
+                        value="{{ data.get('Anos_de_suspension_valor', '') }}">
+                    <span class="unit">años</span>
+                </div>
+                <div class="comentario">Duración esperada de suspensión</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">7.4. Años de expansión</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Anos_de_expansion_valor"
+                        value="{{ data.get('Anos_de_expansion_valor', '') }}">
+                    <span class="unit">años</span>
+                </div>
+                <div class="comentario">Vida útil adicional esperada</div>
+            </div>
+
+            <div class="parametro">
+                <div class="parametro-name">7.5. Capex de expansión</div>
+                <div class="parametro-controls">
+                    <input type="text" name="Capex_de_expansion_valor"
+                        value="{{ data.get('Capex_de_expansion_valor', '') }}">
+                    <span class="unit">USD</span>
+                </div>
+                <div class="comentario">Inversión necesaria si se expande</div>
+            </div>
+        </fieldset>
+
+    </form>
+</body>
+
+</html>
