@@ -43,7 +43,7 @@ def index():
             conn.commit()
             conn.close()
             resumen, tabla_frec, opciones, analisis, dominancia, ranking = correr_simulacion_y_guardar(db_name)
-            bd_name = db_name.split("\\")[-1]
+            bd_name = db_name.split("\ ")[-1]
             return render_template("resultados.html", resumen=resumen, tabla_frec=tabla_frec, opciones=opciones, analisis=analisis, dominancia=dominancia, ranking=ranking, db_name=bd_name)
 
     return render_template("index.html", data=data)

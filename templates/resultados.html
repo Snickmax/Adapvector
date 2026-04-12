@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Resultados de la Simulación</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/resultados.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net
+pm/chart.js"></script>
 </head>
 
 <body>
@@ -181,6 +182,23 @@
             <td>{{ "%.2f"|format(row.costo_planta) }}</td>
             <td>{{ "%.2f"|format(row.costo_total) }}</td>
             <td>{{ row.recomendacion }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Tabla de Frecuencias</h2>
+    <table>
+        <tr>
+            <th>Marca de Clase</th>
+            <th>Frecuencia Absoluta</th>
+            <th>Frecuencia Relativa Acumulada</th>
+            <th>Frecuencia Relativa Acumulada Inversa</th>
+        </tr>
+        {% for row in tabla_frec %}
+        <tr>
+            <td>{{ row.marca_clase }}</td>
+            <td>{{ row.freq_abs }}</td>
+            <td>{{ "%.4f"|format(row.freq_rel_acum) }}</td>
+            <td>{{ "%.4f"|format(row.freq_rel_acum_inv) }}</td>
         </tr>
         {% endfor %}
     </table>

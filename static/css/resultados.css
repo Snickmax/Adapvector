@@ -40,10 +40,6 @@ th {
     margin: 20px auto;
 }
 
-canvas {
-    width: 100% !important;
-    height: 400px !important;
-}
 
 .volver-container {
     text-align: center;
