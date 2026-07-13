@@ -1,6 +1,8 @@
-## 🏗 **Adapvecor - Simulación de Estrategias Mineras**
+## 🏗 **Adapvector - Simulación de Estrategias Mineras**
 
 Este proyecto es una aplicación web en **Flask** que permite cargar parámetros, realizar simulaciones y analizar estrategias para proyectos mineros.
+
+![Formulario de parámetros](docs/formulario.png)
 
 ---
 
@@ -65,7 +67,7 @@ La aplicación estará disponible en: [http://127.0.0.1:5000/](http://127.0.0.1:
 ## 📂 **Estructura del proyecto**
 
 ```
-Adapvecor/
+Adapvector/
 ├── app/                # Código fuente de la app Flask
 │   ├── __init__.py
 │   ├── routes.py
@@ -76,11 +78,20 @@ Adapvecor/
 ├── static/              # Archivos estáticos (CSS, JS)
 ├── uploads/             # Archivo xlsx de prueba
 ├── db/                  # Base de datos y archivos dinámicos
+├── docs/                # Capturas de pantalla
 ├── run.py               # Archivo para ejecutar la app
 ├── requirements.txt     # Dependencias del proyecto
 ├── .gitignore
 └── README.md
 ```
+
+---
+
+## 📊 **Resultados**
+
+Tras cargar los parámetros (por ejemplo desde `uploads/Inputs.xlsx`) y ejecutar la simulación Monte Carlo, la aplicación muestra estadísticas del VAN, gráficos, análisis de dominancia y un ranking de estrategias con recomendaciones:
+
+![Ranking de estrategias y recomendaciones](docs/ranking.png)
 
 ---
 
@@ -93,5 +104,11 @@ Adapvecor/
 ✅ El entorno virtual te mantiene las dependencias aisladas.
 
 ✅ No subas el contenido de `venv/`, `db/` o archivos de base de datos al repositorio.
+
+---
+
+## 🔭 **Trabajo futuro**
+
+- Integrar **SimulAdapvector** como módulo de cronogramas, para complementar el análisis financiero de estrategias con la planificación temporal de las actividades del proyecto minero.
 
 ---

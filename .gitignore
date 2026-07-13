@@ -1,5 +1,6 @@
 # Ignorar entorno virtual
 venv/
+.venv/
 
 # Ignorar archivos de base de datos dentro de la carpeta db
 db/*
@@ -22,3 +23,6 @@ __pycache__/
 # Ignorar archivos del sistema
 .DS_Store
 Thumbs.db
+
+# Ignorar notas locales
+CLAUDE.md

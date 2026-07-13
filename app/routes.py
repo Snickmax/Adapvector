@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from .helpers import normalizar_parametro, get_new_db_filename
 from .db_utils import init_db
 from .simulacion import correr_simulacion_y_guardar
+import os
 import pandas as pd
 import sqlite3
 
@@ -43,7 +44,7 @@ def index():
             conn.commit()
             conn.close()
             resumen, tabla_frec, opciones, analisis, dominancia, ranking = correr_simulacion_y_guardar(db_name)
-            bd_name = db_name.split("\ ")[-1]
+            bd_name = os.path.basename(db_name)
             return render_template("resultados.html", resumen=resumen, tabla_frec=tabla_frec, opciones=opciones, analisis=analisis, dominancia=dominancia, ranking=ranking, db_name=bd_name)
 
     return render_template("index.html", data=data)
